@@ -4,9 +4,8 @@ on:
 jobs:
   deploy:
     env:
-      env:
-        AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-        AWS_SECRET_ACCESS_KEY: "${{ secrets['AWS_SECRET_ACCESS_KEY'] }}
+      AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
+      AWS_SECRET_ACCESS_KEY: "${{ secrets['AWS_SECRET_ACCESS_KEY'] }}"
 
     runs-on: ubuntu-latest
     steps:
@@ -18,10 +17,10 @@ jobs:
           terraform_version: 1.12.2
       - name: Terraform Init, Plan
         run: |
-            terraform init
-            terraform plan
+          terraform init
+          terraform plan
       - name: Terraform Apply
-        run: 
-            terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve
 
 

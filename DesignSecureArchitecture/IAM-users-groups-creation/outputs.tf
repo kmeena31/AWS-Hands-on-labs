@@ -39,3 +39,23 @@ output "hr_team_policy" {
 
   value = aws_iam_group_policy_attachment.hr_billing.policy_arn
 }
+
+output "john_password" {
+  value     = aws_iam_user_login_profile.john.password
+  sensitive = true
+}
+
+output "sarah_password" {
+  value     = aws_iam_user_login_profile.sarah.password
+  sensitive = true
+}
+
+output "ted_password" {
+  value     = aws_iam_user_login_profile.ted.password
+  sensitive = true
+}
+
+output "rita_password" {
+  value     = aws_iam_user_login_profile.rita.password
+  sensitive = true
+}

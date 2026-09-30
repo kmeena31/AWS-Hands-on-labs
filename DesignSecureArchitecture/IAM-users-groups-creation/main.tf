@@ -32,7 +32,7 @@ resource "aws_iam_user" "john" {
 
 resource "aws_iam_user_login_profile" "john" {
   user                    = aws_iam_user.john.name
-  password                = var.lab_password
+  password_length         = 16
   password_reset_required = false
 }
 

@@ -1,7 +1,7 @@
 1.  Creating IAM Users & Groups in  AWS
 
 
- <!-- ==========================================================
+ ``` <!-- ==========================================================
 # AWS IAM LAB
 # Region: us-east-1
 #
@@ -18,7 +18,9 @@
 # Policy Attached for each team 
 # Dev-Team: AmazonEC2ReadOnlyAccess, AmazonS3ReadOnlyAccess
 # HR-Team: Billing
-# ==========================================================  -->
+# ==========================================================  -->```
+
+
 
 Example:
 

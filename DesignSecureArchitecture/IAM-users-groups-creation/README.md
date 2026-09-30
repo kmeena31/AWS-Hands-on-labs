@@ -1,8 +1,8 @@
- Creating IAM Users & Groups in  AWS
+1.  Creating IAM Users & Groups in  AWS
 
-  Creating Users & groups and attaching policy for each group using terraform 
- ```==========================================================
-#AWS IAM LAB
+
+ <!-- ==========================================================
+# AWS IAM LAB
 # Region: us-east-1
 #
 # Users:
@@ -18,7 +18,7 @@
 # Policy Attached for each team 
 # Dev-Team: AmazonEC2ReadOnlyAccess, AmazonS3ReadOnlyAccess
 # HR-Team: Billing
-# ========================================================== ```
+# ==========================================================  -->
 
 Example:
 

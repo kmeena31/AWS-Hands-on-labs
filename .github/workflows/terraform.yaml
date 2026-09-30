@@ -17,12 +17,12 @@ jobs:
           terraform_version: 1.12.2
       - name: Terraform Init
         run: terraform init
-        working-directory: ./AWS-Hands-on-labs/DesignSecureArchitecture/IAM-users-groups/
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
       - name: Terraform plan
         run: terraform plan
-        working-directory: ./AWS-Hands-on-labs/DesignSecureArchitecture/IAM-users-groups/
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./AWS-Hands-on-labs/DesignSecureArchitecture/IAM-users-groups/
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
 
 

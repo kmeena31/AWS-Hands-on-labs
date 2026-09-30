@@ -51,7 +51,7 @@ resource "aws_iam_user" "sarah" {
 
 resource "aws_iam_user_login_profile" "sarah" {
   user                    = aws_iam_user.sarah.name
-  password                = var.lab_password
+  password_length         = 16
   password_reset_required = false
 }
 
@@ -70,7 +70,7 @@ resource "aws_iam_user" "ted" {
 
 resource "aws_iam_user_login_profile" "ted" {
   user                    = aws_iam_user.ted.name
-  password                = var.lab_password
+  password_length         = 16
   password_reset_required = false
 }
 
@@ -89,7 +89,7 @@ resource "aws_iam_user" "rita" {
 
 resource "aws_iam_user_login_profile" "rita" {
   user                    = aws_iam_user.rita.name
-  password                = var.lab_password
+  password_length         = 16
   password_reset_required = false
 }
 

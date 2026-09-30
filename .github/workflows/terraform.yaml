@@ -15,12 +15,14 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
-      - name: Terraform Init, Plan
-        run: |
-          terraform init
-          terraform plan
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups/
+      - name: Terraform plan
+        run: terraform plan
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups/
       - name: Terraform Apply
-        run: |
-          terraform apply -auto-approve
+        run: terraform apply -auto-approve
+        working-directory: ./DesignSecureArchitecture/IAM-users-groups/
 
 

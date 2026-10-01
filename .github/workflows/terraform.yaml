@@ -39,9 +39,9 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
-      - name: Terraform Plan (Destroy)
-        run: terraform plan -destroy -out=destroy.tfplan
-        # This generates a preview of what will be deleted
+    #   - name: Terraform Plan (Destroy)
+    #     run: terraform plan -destroy -out=destroy.tfplan
+    #     # This generates a preview of what will be deleted
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+    #   - name: Terraform Destroy
+    #     run: terraform destroy -auto-approve

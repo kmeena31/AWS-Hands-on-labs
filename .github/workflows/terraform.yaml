@@ -28,21 +28,21 @@ jobs:
       - name: Terraform Init 
         run: terraform init
 
-    #   - name:  Terraform Format Check
-    #     run: terraform fmt 
+      - name:  Terraform Format Check
+        run: terraform fmt 
 
-    #   - name: Terraform Validate
-    #     run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate
 
-    #   - name: Terraform Plan
-    #     run: terraform plan
+      - name: Terraform Plan
+        run: terraform plan
 
-    #   - name: Terraform Apply
-    #     run: terraform apply -auto-approve
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
 
-      - name: Terraform Plan (Destroy)
-        run: terraform plan -destroy -out=destroy.tfplan
-        # This generates a preview of what will be deleted
+    #   - name: Terraform Plan (Destroy)
+    #     run: terraform plan -destroy -out=destroy.tfplan
+    #     # This generates a preview of what will be deleted
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+    #   - name: Terraform Destroy
+    #     run: terraform destroy -auto-approve

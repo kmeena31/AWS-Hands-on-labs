@@ -17,12 +17,12 @@ jobs:
           terraform_version: 1.12.2
       - name: Terraform Init
         run: terraform init
-        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
+        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
       - name: Terraform plan
         run: terraform plan
-        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
+        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./DesignSecureArchitecture/IAM-users-groups-creation
+        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
 
 

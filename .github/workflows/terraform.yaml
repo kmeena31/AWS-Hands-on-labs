@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "Save Working Directory:"
           echo "TF_WORKING_DIR=$(pwd)" 
-          echo "Terraform Working Directory:"
+          echo "Terraform Working Directory"
           echo "$TF_WORKING_DIR"
 
       - name: Set Up Terraform

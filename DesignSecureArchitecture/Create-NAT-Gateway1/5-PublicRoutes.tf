@@ -1,5 +1,5 @@
 # Create public route table
-resource "aws_route_table" "public_route_table" {
+resource "aws_route_table" "public" {
   vpc_id = aws_vpc.my_vpc.id
   tags = {
     Name = "${local.env}-public"

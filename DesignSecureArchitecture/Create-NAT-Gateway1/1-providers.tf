@@ -12,5 +12,5 @@ terraform {
 # AWS provider for setting Region
 
 provider "aws" {
-  region = locals.region
+  region = local.region
 }

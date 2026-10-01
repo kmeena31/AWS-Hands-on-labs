@@ -1,51 +1,37 @@
 name: Terraform Deployment
 
 on:
-  workflow_dispatch:
-    inputs:
-      terraform_directory:
-        description: "Repository-relative path to the Terraform folder"
-        required: true
-        type: string
+  push:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+      TF_WORKING_DIR: ${{ github.workspace }}
     steps:
-      - name: Checkout repository
+      - name: Code Checkout
         uses: actions/checkout@v4
-
-      - name: Validate selected directory
-        env:
-          TF_DIRECTORY: ${{ inputs.terraform_directory }}
+      - name: Show Present Working Directory
         run: |
-          if [[ ! -d "$TF_DIRECTORY" ]]; then
-            echo "Directory not found: $TF_DIRECTORY"
-            exit 1
-          fi
-          if ! find "$TF_DIRECTORY" -maxdepth 1 -type f -name '*.tf' -print -quit | grep -q .; then
-            echo "No Terraform files found in: $TF_DIRECTORY"
-            exit 1
-          fi
+          echo "Present Working Directory:"
+          pwd
+          echo "Terraform Working Directory:"
+          echo "$TF_WORKING_DIR"
 
-      - name: Set up Terraform
+      - name: Set Up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
 
-      - name: Terraform Init
-        working-directory: ${{ inputs.terraform_directory }}
-        run: terraform init
-
-      - name: Terraform Plan
-        working-directory: ${{ inputs.terraform_directory }}
-        run: terraform plan
+      - name: Terraform Init and Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform init
+          terraform plan
 
       - name: Terraform Apply
-        working-directory: ${{ inputs.terraform_directory }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform apply -auto-approve
+

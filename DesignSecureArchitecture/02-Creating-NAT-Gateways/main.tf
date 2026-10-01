@@ -1,10 +1,4 @@
 
-# AWS provider for setting Region
-
-provider "aws" {
-  region = "us-east-1"
-}
-
 #step 1: Create VPC
 resource "aws_vpc" "my_vpc"{
 

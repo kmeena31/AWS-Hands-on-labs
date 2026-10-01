@@ -5,9 +5,11 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 6.0"
-    }
+    }    
   }
 }
+
+# AWS provider for setting Region
 
 provider "aws" {
   region = "us-east-1"

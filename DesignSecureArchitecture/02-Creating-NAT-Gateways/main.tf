@@ -31,3 +31,12 @@ resource "aws_subnet" "private_subnet" {
     Name = "MyPrivateSubnet"
   }
 }
+#step 3: Create internet gateway 
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "MyIGW"
+  }
+}
+
+#step 4: Create public route table

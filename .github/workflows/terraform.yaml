@@ -15,7 +15,7 @@ jobs:
         run: |
          set -euo pipefail
 
-          root="AWS-Hands-on-labs/DesignSecureArchitecture"
+          root="DesignSecureArchitecture"
           test -d "$root" || { echo "Directory not found: $root"; exit 1; }
 
           dirs=$(find "$root" -mindepth 2 -maxdepth 2 -type f -name '*.tf' -printf '%h\n' | sort -u)

@@ -13,16 +13,22 @@ jobs:
       - id: find-folders
         name: Find Terraform folders
         run: |
-          matrix=$(find DesignSecureArchitectures -mindepth 2 -maxdepth 3 -type f -name '*.tf' -printf '%h\n' \
-            | sort -u \
-            | jq -R -s -c '
-                split("\n")
-                | map(select(length > 0))
-                | {include: map({
-                    directory: .,
-                    state_key: ((sub("^DesignSecureArchitectures/"; "") | gsub("/"; "-")) + "/terraform.tfstate")
-                  })}
-              ')
+         set -euo pipefail
+
+          root="AWS-Hands-on-labs/DesignSecureArchitecture"
+          test -d "$root" || { echo "Directory not found: $root"; exit 1; }
+
+          dirs=$(find "$root" -mindepth 2 -maxdepth 2 -type f -name '*.tf' -printf '%h\n' | sort -u)
+          test -n "$dirs" || { echo "No .tf files found under $root"; exit 1; }
+
+            matrix=$(printf '%s\n' "$dirs" | jq -R -s -c '
+            split("\n")
+            | map(select(length > 0))
+            | {include: map({
+                directory: .,
+                state_key: ((sub("^AWS/design/"; "") | gsub("/"; "-")) + "/terraform.tfstate")
+              })}
+          ')
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   deploy:

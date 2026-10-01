@@ -1,28 +1,56 @@
 name: Terraform Deployment
 on:
   push:
-jobs:
-  deploy:
-    env:
-      AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-      AWS_SECRET_ACCESS_KEY: "${{ secrets['AWS_SECRET_ACCESS_KEY'] }}"
 
+jobs:
+  discover:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-folders.outputs.matrix }}
     steps:
-      - name: Code Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - id: find-folders
+        name: Find Terraform folders
+        run: |
+          matrix=$(find DesignSecureArchitectures -mindepth 2 -maxdepth 2 -type f -name '*.tf' -printf '%h\n' \
+            | sort -u \
+            | jq -R -s -c '
+                split("\n")
+                | map(select(length > 0))
+                | {include: map({
+                    directory: .,
+                    state_key: ((sub("^DesignSecureArchitectures/"; "") | gsub("/"; "-")) + "/terraform.tfstate")
+                  })}
+              ')
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Set Up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
+
       - name: Terraform Init
-        run: terraform init
-        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
+        working-directory: ${{ matrix.directory }}
+        run: |
+          terraform init
+
       - name: Terraform plan
+        working-directory: ${{ matrix.directory }}
         run: terraform plan
-        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
+
       - name: Terraform Apply
+        working-directory: ${{ matrix.directory }}
         run: terraform apply -auto-approve
-        working-directory: ./DesignSecureArchitecture/02-Creating-NAT-Gateways
-
-

@@ -1,62 +1,51 @@
 name: Terraform Deployment
+
 on:
-  push:
+  workflow_dispatch:
+    inputs:
+      terraform_directory:
+        description: "Repository-relative path to the Terraform folder"
+        required: true
+        type: string
 
 jobs:
-  discover:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.find-folders.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - id: find-folders
-        name: Find Terraform folders
-        run: |
-         set -euo pipefail
-
-          root="DesignSecureArchitecture"
-          test -d "$root" || { echo "Directory not found: $root"; exit 1; }
-
-          dirs=$(find "$root" -mindepth 2 -maxdepth 2 -type f -name '*.tf' -printf '%h\n' | sort -u)
-          test -n "$dirs" || { echo "No .tf files found under $root"; exit 1; }
-
-            matrix=$(printf '%s\n' "$dirs" | jq -R -s -c '
-            split("\n")
-            | map(select(length > 0))
-            | {include: map({
-                directory: .,
-                state_key: ((sub("^AWS/design/"; "") | gsub("/"; "-")) + "/terraform.tfstate")
-              })}
-          ')
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-
   deploy:
-    needs: discover
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set Up Terraform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate selected directory
+        env:
+          TF_DIRECTORY: ${{ inputs.terraform_directory }}
+        run: |
+          if [[ ! -d "$TF_DIRECTORY" ]]; then
+            echo "Directory not found: $TF_DIRECTORY"
+            exit 1
+          fi
+          if ! find "$TF_DIRECTORY" -maxdepth 1 -type f -name '*.tf' -print -quit | grep -q .; then
+            echo "No Terraform files found in: $TF_DIRECTORY"
+            exit 1
+          fi
+
+      - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
 
       - name: Terraform Init
-        working-directory: ${{ matrix.directory }}
-        run: |
-          terraform init
+        working-directory: ${{ inputs.terraform_directory }}
+        run: terraform init
 
-      - name: Terraform plan
-        working-directory: ${{ matrix.directory }}
+      - name: Terraform Plan
+        working-directory: ${{ inputs.terraform_directory }}
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: ${{ matrix.directory }}
+        working-directory: ${{ inputs.terraform_directory }}
         run: terraform apply -auto-approve

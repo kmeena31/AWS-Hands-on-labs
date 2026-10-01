@@ -13,7 +13,7 @@ jobs:
       - id: find-folders
         name: Find Terraform folders
         run: |
-          matrix=$(find DesignSecureArchitectures -mindepth 2 -maxdepth 2 -type f -name '*.tf' -printf '%h\n' \
+          matrix=$(find DesignSecureArchitectures -mindepth 2 -maxdepth 3 -type f -name '*.tf' -printf '%h\n' \
             | sort -u \
             | jq -R -s -c '
                 split("\n")
